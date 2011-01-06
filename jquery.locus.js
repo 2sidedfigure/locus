@@ -3,16 +3,16 @@
     var
     
     defaults = {
-        origin: $('body'),
-        position: { x: 'r', y: 'b' }, //user should specify like css, i.e. 'right bottom'
-        preventOffScreen: false,
-        positionAdjust: { //how to adjust the bubble position when preventOffScreen == true; user should specify like css
-            t: { y: 'b' }, // '? bottom'
-            r: { x: 'l' }, // 'left ?'
-            b: { y: 't' }, // '? top'
-            l: { x: 'r' }  // 'right ?'
+        origin: $('body'),              //the element that the current selection should be positioned relative to
+        position: { x: 'r', y: 'b' },   //user should specify like css, i.e. 'right bottom'
+        preventOffScreen: false,        //prevent the bubble from being obstructed by the edges of the viewport
+        positionAdjust: {               //how to adjust the bubble position when preventOffScreen == true; user should specify like css
+            t: { y: 'b' },                  // '? bottom'
+            r: { x: 'l' },                  // 'left ?'
+            b: { y: 't' },                  // '? top'
+            l: { x: 'r' }                   // 'right ?'
         },
-        baseCSS: {
+        baseCSS: {                      //any CSS that should be merged in with the top and left declarations
             'position': 'absolute'
         }
     },

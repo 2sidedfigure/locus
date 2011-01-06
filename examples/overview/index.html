@@ -123,7 +123,8 @@
     	    var
     	    markup = {
     	        star: '<div class="jqBbl starBbl"><div class="arrow"><div></div></div><p></p></div>',
-    	        curse: '<div class="jqBbl curseHover"></div>'
+    	        curse: '<div class="jqBbl curseHover"></div>',
+    	        curseDialog: '<div class="jqBbl cursePrompt"><div class="arrow"><div></div></div><p>Do you want to show profanity site-wide?</p><p class="actions"><a href="#" class="button yes">Yes</a><a href="#" class="button no">No</a></p></div>'
     	    },
     	    starText = [
     	        'Are you kidding me?',
@@ -156,32 +157,66 @@
         	        }
     	        );
     	        
-    	        //curse tooltip
-    	        var curseFooltip = $(markup.curse).hide().css({ 'white-space': 'nowrap' }).appendTo('body');
+    	        //curse
+    	        var curseFooltip = $(markup.curse).hide().css({ 'white-space': 'nowrap' }).appendTo('body'),
+    	            curseDialog = $(markup.curseDialog).hide().appendTo('body');
     	        
     	        $('#profanity span.curse').hover(
     	            function() {
     	                var self = $(this),
-    	                locusObj = {
-    	                    origin: self,
-    	                    position: 'center top',
-                            preventOffScreen: true,
-                            positionAdjust: {
-                              l: 'center-left ?',
-                              r: 'center-right ?'
-                            }
-    	                };
+        	                locusObj = {
+        	                    origin: self,
+        	                    position: 'center top',
+                                preventOffScreen: true,
+                                positionAdjust: {
+                                  l: 'center-left ?',
+                                  r: 'center-right ?'
+                                }
+        	                };
     	                
     	                curseFooltip.show()
-    	                    .css({ 'opacity': 0 })
+    	                    .fadeTo(0, 0)
     	                    .text('Bad words that should not be uttered in front of women or children...')
     	                    .locus(locusObj)
     	                    .fadeTo(200, 1);
     	            },
     	            function() {
-    	                curseFooltip.hide();
+    	                curseFooltip.fadeOut(200);
     	            }
-    	        );
+    	        )
+    	        .bind('click', function(e) {
+    	            var self = $(e.target),
+    	                locusObj = {
+    	                    origin: self,
+    	                    position: 'center top',
+    	                    preventOffScreen: true,
+    	                    positionAdjust: {
+    	                        l: 'center-left ?',
+    	                        r: 'center-right ?'
+    	                    }
+    	                };
+    	                
+    	            curseDialog.show()
+    	                .fadeTo(0, 0)
+    	                .locus(locusObj)
+    	                .fadeTo(200, 1)
+    	                .find('.button').bind('click', function(e) {
+    	                    curseDialog.fadeOut(200);
+    	                    $(document).unbind('click.curseDialog');
+    	                    e.preventDefault();
+    	                });
+    	                
+    	            $(document).bind('click.curseDialog', function(e) {
+    	                var self = $(e.target);
+    	                
+    	                if (!self.closest('.cursePrompt').length) {
+    	                    curseDialog.fadeOut(200);
+    	                    $(document).unbind('click.curseDialog');
+    	                }
+    	            });
+    	            
+    	            e.stopPropagation();
+    	        });
     	    });
     	</script>
     </head>
@@ -204,7 +239,7 @@
         
         <h2>Profanity</h2>
         <div id="profanity">
-            <h3>Click with always-on-screen info/action (bind-once)</h3>
+            <h3>Hover and click</h3>
             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin mattis adipiscing lorem, ut lacinia risus sollicitudin at. In pellentesque nunc vitae lacus venenatis ut ornare nunc sagittis. Curabitur venenatis magna vitae velit iaculis ornare condimentum orci luctus. Nulla lacus odio, sodales nec suscipit at, tincidunt a orci. Aenean nec cursus odio. Quisque nibh magna, hendrerit a iaculis sed, feugiat in tortor. Maecenas ligula lectus, gravida rhoncus tincidunt eu, venenatis nec massa. <span class="curse">F*@#!?g</span> class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nulla facilisi. Nulla facilisi. Pellentesque purus metus, viverra ornare egestas eu, elementum eu dui. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Integer convallis molestie pretium. Cras porttitor risus eget risus interdum viverra. Integer sed elit eu sem aliquet varius non <span class="curse">F*@#!?g</span> at sem. Nulla facilisi.</p>
         </div>
         
