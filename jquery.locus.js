@@ -6,6 +6,7 @@
         origin: $('body'),              //the element that the current selection should be positioned relative to
         position: { x: 'r', y: 'b' },   //user should specify like css, i.e. 'right bottom'
         preventOffScreen: false,        //prevent the bubble from being obstructed by the edges of the viewport
+        relative: false,                //calculate the position relative to the offset parent rather than the document
         positionAdjust: {               //how to adjust the bubble position when preventOffScreen == true; user should specify like css
             t: { y: 'b' },                  // '? bottom'
             r: { x: 'l' },                  // 'left ?'
@@ -115,11 +116,13 @@
     
     //calculate the position of the bubble
     calculatePosition = function(elem, target, position) {
-        var pos = { //find target element's sides relative to the document
-                t: target.offset().top,
-                l: target.offset().left,
-                b: target.offset().top + target.outerHeight(),
-                r: target.offset().left + target.outerWidth()
+        var method = settings.relative ?  'position' : 'offset',
+            coords = target[method](),
+            pos = { //find target element's sides relative to the document or offset parent, depending on settings.relative
+                t: coords.top,
+                l: coords.left,
+                b: coords.top + target.outerHeight(),
+                r: coords.left + target.outerWidth()
             },
             top = pos.b,
             left = pos.r,
